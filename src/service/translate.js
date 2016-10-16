@@ -1585,9 +1585,12 @@ function $translate($STORAGE_KEY, $windowProvider, $translateSanitizationProvide
             // asyncLoader is pending, we execute the handler
             if (defaultTranslationText) {
               deferred.resolve(defaultTranslationText);
-              } else {
-                deferred.resolve(missingTranslationHandlerTranslation);
-              }
+            } else if($translate.isKeepContent()) {
+              // Reject promise to ensure default content in element is kept
+              deferred.reject();
+            } else {
+              deferred.resolve(missingTranslationHandlerTranslation);
+            }
           } else {
             if (defaultTranslationText) {
               deferred.resolve(defaultTranslationText);
